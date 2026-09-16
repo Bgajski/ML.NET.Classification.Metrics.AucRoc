@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>ML.Performance</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference
+		  Include="Microsoft.ML"
+		  Version="4.0.2" />
+
+		<PackageReference
+		  Include="ML.NET.Classification.Metrics.AucRoc"
+		  Version="0.5.0" />
+
+		<PackageReference
+		  Include="WinForms.DataVisualization"
+		  Version="1.9.2" />
+	</ItemGroup>
+
+</Project>

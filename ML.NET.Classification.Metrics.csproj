@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+		<!-- Managed assembly identity -->
+		<AssemblyName>ML.NET.Classification.Metrics.AucRoc</AssemblyName>
+		<RootNamespace>ML.NET.Metrics.Evaluation</RootNamespace>
+
+		<!-- NuGet package identity -->
+		<PackageId>ML.NET.Classification.Metrics.AucRoc</PackageId>
+		<Title>ML.NET Classification Metrics: AUC and ROC</Title>
+		<Version>0.5.0</Version>
+		<Authors>Bgajski</Authors>
+		<Copyright>Copyright © 2026 Bgajski</Copyright>
+		<Description>Unofficial native C++ ROC curve generation and AUC calculation for ML.NET binary classification models, with exact and binned evaluation modes.</Description>
+		<PackageTags>mlnet;machine-learning;binary-classification;metrics;auc;roc;native;cpp;windows-x64</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>Version 0.5.0 packages the Windows x64 coremetrics.dll runtime, improves input and native error validation, adds exact AUC-only evaluation, and keeps the returned ROC points consistent with the reported AUC.</PackageReleaseNotes>
+
+		<!-- NuGet package generation -->
+		<IsPackable>true</IsPackable>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Deterministic>true</Deterministic>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageOutputPath>$(MSBuildProjectDirectory)\artifacts\packages</PackageOutputPath>
+
+		<!-- Symbol package -->
+		<DebugType>portable</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Test sources are compiled only by the test project -->
+		<Compile Remove="tests\**\*.cs" />
+
+		<!-- Remove default items before explicitly packing them -->
+		<None Remove="README.md" />
+		<None Remove="LICENSE.txt" />
+
+		<!-- Native Windows x64 C++ implementation -->
+
+		<!-- NuGet README -->
+		<None Include="README.md" Pack="true" PackagePath="" />
+
+		<!-- License -->
+		<None Include="LICENSE.txt" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="native\win-x64\" />
+	</ItemGroup>
+
+	<!-- Prevent packaging when the native DLL is missing -->
+	<Target Name="ValidateNativeRuntimeAsset" BeforeTargets="GenerateNuspec">
+
+		<Error Condition="!Exists('$(MSBuildProjectDirectory)\runtimes\win-x64\native\coremetrics.dll')" Text="Cannot create the NuGet package because runtimes\win-x64\native\coremetrics.dll is missing. Build coremetrics in Release x64 and copy the resulting DLL into the runtime directory." />
+
+	</Target>
+
+</Project>
